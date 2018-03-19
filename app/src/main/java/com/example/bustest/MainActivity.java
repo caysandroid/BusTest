@@ -9,13 +9,16 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.example.bustest.Activity.SettingActivity;
 import com.example.bustest.Constant.Constant;
 import com.example.bustest.Fragment.BaseFragment;
+import com.example.bustest.Manager.AbsSuperApplication;
 import com.example.bustest.UI.BottomControlPanel.BottomPanelCallback;
 import com.example.bustest.UI.BottomControlPanel;
 import com.example.bustest.UI.HeadControlPanel;
 
 public class MainActivity extends Activity implements BottomPanelCallback{
+    public static Activity activity=null;
     BottomControlPanel bottomPanel;
     HeadControlPanel headPanel;
     private FragmentManager fragmentManager=null;
@@ -28,6 +31,8 @@ public class MainActivity extends Activity implements BottomPanelCallback{
         initUI();
         fragmentManager = getFragmentManager();
         setDefaultFirstFragment(Constant.fragment_love);
+        activity=MainActivity.this;
+        AbsSuperApplication.activities.add(MainActivity.this);
     }
     private void initUI(){
         bottomPanel = (BottomControlPanel)findViewById(R.id.bottom_layout);
@@ -62,7 +67,7 @@ public class MainActivity extends Activity implements BottomPanelCallback{
         }
         setTabSelection(tag); //切换Fragment
         headPanel.setMiddleTitle(tag);//切换标题
-        headPanel.setRightTitle("更多");
+        headPanel.setRightTitle("");
     }
     private void setDefaultFirstFragment(String tag){
         setTabSelection(tag);
@@ -102,7 +107,7 @@ public class MainActivity extends Activity implements BottomPanelCallback{
 
         Fragment f = fragmentManager.findFragmentByTag(tag);
 
-        if(f == null){
+        if(f==null){
             Toast.makeText(getApplicationContext(), "fragment = null tag = " + tag, Toast.LENGTH_SHORT).show();
             f = BaseFragment.newInstance(getApplicationContext(), tag);
         }
@@ -135,33 +140,7 @@ public class MainActivity extends Activity implements BottomPanelCallback{
     public  void setTabSelection(String tag) {
         // 开启一个Fragment事务
         fragmentTransaction = fragmentManager.beginTransaction();
-/*       if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_MESSAGE)){
-           if (messageFragment == null) {
-                messageFragment = new MessageFragment();
-            }
-
-        }else if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_CONTACTS)){
-            if (contactsFragment == null) {
-                contactsFragment = new ContactsFragment();
-            }
-
-        }else if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_NEWS)){
-            if (newsFragment == null) {
-                newsFragment = new NewsFragment();
-            }
-
-        }else if(TextUtils.equals(tag,Constant.FRAGMENT_FLAG_SETTING)){
-            if (settingFragment == null) {
-                settingFragment = new SettingFragment();
-            }
-        }else if(TextUtils.equals(tag, Constant.FRAGMENT_FLAG_SIMPLE)){
-            if (simpleFragment == null) {
-                simpleFragment = new SimpleFragment();
-            }
-
-        }*/
         switchFragment(tag);
-
     }
 
     @Override
