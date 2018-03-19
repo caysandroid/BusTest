@@ -22,4 +22,7 @@ public class Constant {
     public static String URL="http://111.230.5.110/javaweb/";//自己电脑的ip地址
     public static String URL_Register=URL+"RegisterServlet";
     public static String URL_Login=URL+"login";
+    //MeSetting
+    public static String me_setting="设置";
+    public static String me_about="关于";
 }
