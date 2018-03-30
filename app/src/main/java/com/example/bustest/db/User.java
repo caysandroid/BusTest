@@ -13,6 +13,7 @@ public class User extends DataSupport {
     private String name;//姓名
     private String password;//密码
     private String nickName;//昵称
+    /*private String sex;*/
     private Pos pos=new Pos();//经纬度，坐标
     private Participant participant=new Participant();//参与者
     private Requester requester=new Requester();//请求者
@@ -40,4 +41,10 @@ public class User extends DataSupport {
     public String getName(){
         return this.name;
     }
+    /*public void setSex(String sex){
+        this.sex=sex;
+    }
+    public String getSex(){
+        return sex;
+    }*/
 }

@@ -3,6 +3,8 @@ package com.example.bustest.UI;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class HeadControlPanel extends RelativeLayout{
     private Context mContext;
     private TextView middleTitle;
-    private TextView rightTitle;
+    private ImageView rightImage;
     private static final float middle_title_size = 20f;
     private static final float right_title_size = 17f;
     private static final int default_background_color = Color.rgb(23, 124, 202);
@@ -31,7 +33,7 @@ public class HeadControlPanel extends RelativeLayout{
     @Override
     protected void onFinishInflate() {
         middleTitle = (TextView)findViewById(R.id.midle_title);
-        rightTitle = (TextView)findViewById(R.id.right_title);
+        rightImage=(ImageView)findViewById(R.id.right_image);
         setBackgroundColor(default_background_color);
     }
     public void initHeadPanel(){
@@ -44,8 +46,11 @@ public class HeadControlPanel extends RelativeLayout{
         middleTitle.setText(s);
         middleTitle.setTextSize(middle_title_size);
     }
-    public void setRightTitle(String s){
-        rightTitle.setText(s);
-        rightTitle.setTextSize(right_title_size);
+    public void setRightImage(int resId){
+        rightImage.setImageResource(resId);
+    }
+    public void setRightImageVisibility(boolean t){
+        if(t)rightImage.setVisibility(View.VISIBLE);
+        else rightImage.setVisibility(View.INVISIBLE);
     }
 }

@@ -54,6 +54,7 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".Activity.SettingActivity" />
+        <activity android:name=".Activity.RegisterActivity"></activity>
     </application>
 
 </manifest>
