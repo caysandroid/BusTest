@@ -23,8 +23,10 @@ import com.example.bustest.Json.Login;
 import com.example.bustest.MainActivity;
 import com.example.bustest.Manager.AbsSuperApplication;
 import com.example.bustest.R;
+import com.example.bustest.Response.ResponseInfo;
 import com.example.bustest.util.HttpUtil;
 import com.example.bustest.util.Utility;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -39,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button loginBtn,registerBtn;
     private static int status=0;
     private ProgressDialog dialog;
+    public static Activity loginActivity=null;
     SharedPreferences sp=null,loginSp=null;
     public static boolean autoLogin=true;
     private Handler handler=new Handler(){
@@ -70,6 +73,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             autoLogin=bundle.getBoolean("autoLogin");
         }
         setContentView(R.layout.activity_login);
+        loginActivity=LoginActivity.this;
         accountEdit=(EditText)findViewById(R.id.account);
         passwordEdit=(EditText)findViewById(R.id.password);
         rememberPassword=(CheckBox)findViewById(R.id.remember_password);
@@ -90,22 +94,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginBtn.setOnClickListener(this);
         registerBtn.setOnClickListener(this);
         AbsSuperApplication.activities.add(LoginActivity.this);
+        AbsSuperApplication.activities.add(loginActivity);
     }
     @Override
     public void onClick(View v) {
-        String account=accountEdit.getText().toString();
-        String password=passwordEdit.getText().toString();
-        if(account==null||password==null||account.equals("")||password.equals("")){
-            wrong();
-            return;
-        }
         switch (v.getId()){
             case R.id.login_btn:
+                String account=accountEdit.getText().toString();
+                String password=passwordEdit.getText().toString();
+                if(account==null||password==null||account.equals("")||password.equals("")){
+                    wrong();
+                    return;
+                }
                 status=0;
                 dialog=ProgressDialog.show(this,"登录","Please wait...");
                 new loginDialog().start();
                 break;
             case R.id.register_btn:
+                Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(intent);
                 break;
             default:break;
         }
@@ -132,7 +139,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText=response.body().string();
-                final Login login= Utility.handleLoginRequest(responseText);
+                Gson gson=new Gson();
+                final Login login= gson.fromJson(responseText,Login.class);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

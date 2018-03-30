@@ -9,8 +9,8 @@ import com.google.gson.annotations.SerializedName;
 public class Login {
     @SerializedName("responseCode")
     public String responseCode;
-    @SerializedName("info")
-    public String info;
+    @SerializedName("responseMsg")
+    public String responseMsg;
     @SerializedName("text")
     public String text;
 }

@@ -7,6 +7,8 @@ import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.bustest.Activity.SettingActivity;
@@ -21,6 +23,7 @@ public class MainActivity extends Activity implements BottomPanelCallback{
     public static Activity activity=null;
     BottomControlPanel bottomPanel;
     HeadControlPanel headPanel;
+    private ImageView rightImage;
     private FragmentManager fragmentManager=null;
     private FragmentTransaction fragmentTransaction=null;
     public static String currTag="";
@@ -28,6 +31,7 @@ public class MainActivity extends Activity implements BottomPanelCallback{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        rightImage=(ImageView)findViewById(R.id.right_image);
         initUI();
         fragmentManager = getFragmentManager();
         setDefaultFirstFragment(Constant.fragment_love);
@@ -44,6 +48,12 @@ public class MainActivity extends Activity implements BottomPanelCallback{
         if(headPanel != null){
             headPanel.initHeadPanel();
         }
+        rightImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,"task",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     @Override
     public void onBottomPanelClick(int itemId) {
@@ -67,7 +77,11 @@ public class MainActivity extends Activity implements BottomPanelCallback{
         }
         setTabSelection(tag); //切换Fragment
         headPanel.setMiddleTitle(tag);//切换标题
-        headPanel.setRightTitle("");
+        if(tag.equals(Constant.fragment_love)){
+            headPanel.setRightImage(R.drawable.ic_right_image);
+            headPanel.setRightImageVisibility(true);
+        }
+        else headPanel.setRightImageVisibility(false);
     }
     private void setDefaultFirstFragment(String tag){
         setTabSelection(tag);
@@ -85,9 +99,7 @@ public class MainActivity extends Activity implements BottomPanelCallback{
     private FragmentTransaction ensureTransaction( ){
         if(fragmentTransaction == null){
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         }
         return fragmentTransaction;
     }
@@ -96,7 +108,6 @@ public class MainActivity extends Activity implements BottomPanelCallback{
             if(f.isDetached()){
                 ensureTransaction();
                 fragmentTransaction.attach(f);
-
             }else if(!f.isAdded()){
                 ensureTransaction();
                 fragmentTransaction.add(layout, f, tag);
@@ -108,7 +119,6 @@ public class MainActivity extends Activity implements BottomPanelCallback{
         Fragment f = fragmentManager.findFragmentByTag(tag);
 
         if(f==null){
-            Toast.makeText(getApplicationContext(), "fragment = null tag = " + tag, Toast.LENGTH_SHORT).show();
             f = BaseFragment.newInstance(getApplicationContext(), tag);
         }
         return f;
@@ -142,13 +152,11 @@ public class MainActivity extends Activity implements BottomPanelCallback{
         fragmentTransaction = fragmentManager.beginTransaction();
         switchFragment(tag);
     }
-
     @Override
     protected void onStop() {
         super.onStop();
         currTag = "";
     }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
